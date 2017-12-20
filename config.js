@@ -1,6 +1,7 @@
 var config = {
     token:'weixin',
-    appid:'wxff868ae96d4da646',
-    encodingAESKey:'TLiN6TCBHCXkPgPlcn9De6aDXv86KDvpacbgfV25Bb1'
+    appid:'wx4049d69f956c458f',
+    appSecret:'b4ae0248a6251bde28c177494e0efd65',
+    encodingAESKey:''
 };
 module.exports = config;

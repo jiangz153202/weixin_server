@@ -8,7 +8,7 @@ var wechatAPI = require('wechat-api');
 
 
 //创建wechat-api
-var api = new wechatAPI(config.appid, 'b4ae0248a6251bde28c177494e0efd65');
+var api = new wechatAPI(config.appid, config.appSecret);
 
 var menu = {
   "button": [
@@ -52,7 +52,7 @@ api.createMenu(menu, function (err, result) {
   console.log('info', 'create menu success');
 });
 
-
+router.use(express.query());  
 router.use('/wechat', wechat(config, wechat.text(function (message, req, res, next) {
     //------------------------------------------------------------------------
     var message = req.weixin;
