@@ -1,59 +1,10 @@
-var logger = require('morgan');
 var express = require('express');
 var router = express.Router();
 
 var wechat = require('wechat');
 var config = require('../config.js');
+var weichatApi = require('../lib/wechatAPI.js');
 
-var wechatAPI = require('wechat-api'); 
-
-
-//创建wechat-api
-var api = new wechatAPI(config.appid, config.appSecret);
-
-var menu = {
-  "button": [
-    {
-      "type": "click",
-      "name": "WeChat Bot",
-      "key": "V1001_TODAY_MUSIC"
-    },
-    {
-      "name": "BotFramework",
-      "sub_button": [
-        {
-          "type": "view",
-          "name": "botframework",
-          "url": "https://dev.botframework.com/"
-        },
-        {
-          "type": "click",
-          "name": "赞一下我们",
-          "key": "V1001_GOOD"
-        }, {
-          "name": "发送位置",
-          "type": "location_select",
-          "key": "rselfmenu_2_0"
-        },]
-    }]
-};
-//删除菜单
-api.removeMenu(function (err, result) {
-  if (err) {
-    console.log('error', err);
-  }
-  console.log('info', 'remove menu success');
-});
-
-//创建菜单
-api.createMenu(menu, function (err, result) {
-  if (err) {
-    console.log('error', err);
-  }
-  console.log('info', 'create menu success');
-});
-
-router.use(express.query());  
 router.use('/wechat', wechat(config,function(req, res, next) {
 	
     var message=req.weixin;
@@ -77,6 +28,14 @@ router.use('/wechat', wechat(config,function(req, res, next) {
                         picurl: '图片绝对地址',
                         url: '' }
                 ]);
+                break;
+            case '创建菜单':
+                weichatApi._createMenu();
+                res.reply('创建菜单中,请退出公众号重新进入');
+                break;
+            case '删除菜单':
+                weichatApi._removeMenu();
+                res.reply('删除菜单中,请退出公众号重新进入');
                 break;
             default:    //默认回复文本消息
                 res.reply({
