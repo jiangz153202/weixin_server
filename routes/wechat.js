@@ -8,7 +8,7 @@ var wechatAPI = require('wechat-api');
 
 
 //创建wechat-api
-var api = new wechatAPI(config.appid, 'b09a91f59291b95323c59cc93800e9da');
+var api = new wechatAPI(config.appid, 'b4ae0248a6251bde28c177494e0efd65');
 
 var menu = {
   "button": [
