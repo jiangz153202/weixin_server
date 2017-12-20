@@ -54,69 +54,57 @@ api.createMenu(menu, function (err, result) {
 });
 
 router.use(express.query());  
-router.use('/wechat', wechat(config, wechat.text(function(message, req, res, next) {
-	//------------------------------------------------------------------------
-	var message = req.weixin;
-	logger.log("info", message);
+router.use('/wechat', wechat(config,function(req, res, next) {
+	
+    var message=req.weixin;
+    if (message && message.MsgType == 'text') {
+        var text = '';
+        var description = '';
+        switch (message.Content) {
+            case '阿龟':
+                res.reply({
+                    content: 'hello world!',
+                    type: 'text'
+                });
+                break;
+            case 'img':
+                text = '关键词2';
+                description = message.ToUserName + '----' + message.FromUserName;
+                res.reply([
+                    {
+                        title: text,
+                        description: description,
+                        picurl: '图片绝对地址',
+                        url: '' }
+                ]);
+                break;
+            default:    //默认回复文本消息
+                res.reply({
+                    content: '消息已收到',
+                    type: 'text'
+                });
+                break;
+        }
+    } else if (message && message.Event) {
+        switch (message.Event) {
+            case 'subscribe':
+                res.reply({
+                    content: '关注事件',
+                    type: 'text'
+                });
+                break;
+            case 'unsubscribe':    //取消关注
+                break;
+            default:
+                res.reply({
+                    content: 'O(∩_∩)O~',
+                    type: 'text'
+                });
+                break;
+        }
+    }
 
-	res.reply('Message Send To Bot Completed , Wait Response.');
-
-	api.sendText(message.FromUserName, 'this message from wechat-api', function(err, result) {
-		if(err) {
-			logger.log('error', err);
-		}
-		logger.log('info', 'reply message success');
-	});
-
-}).image(function(message, req, res, next) {
-	var message = req.weixin;
-	logger.log("info", message);
-
-	res.reply('功能开发中');
-}).voice(function(message, req, res, next) {
-	var message = req.weixin;
-	logger.log("info", message);
-
-	res.reply('功能开发中');
-}).video(function(message, req, res, next) {
-	var message = req.weixin;
-	logger.log("info", message);
-
-	res.reply('功能开发中');
-}).location(function(message, req, res, next) {
-	var message = req.weixin;
-	logger.log("info", message);
-
-	res.reply('功能开发中');
-}).link(function(message, req, res, next) {
-	var message = req.weixin;
-	logger.log("info", message);
-
-	res.reply('功能开发中');
-}).event(function(message, req, res, next) {
-	var message = req.weixin;
-	logger.log("info", message);
-
-	res.reply('感谢你的关注，你也可以在nodejs npm中查看wechat和wechat-api');
-
-}).device_text(function(message, req, res, next) {
-	var message = req.weixin;
-	logger.log("info", message);
-
-	res.reply('功能开发中');
-}).device_event(function(message, req, res, next) {
-	if(message.Event === 'subscribe' || message.Event === 'unsubscribe') {
-		var message = req.weixin;
-		logger.log("info", message);
-
-		res.reply("功能开发中");
-	} else {
-		var message = req.weixin;
-		logger.log("info", message);
-
-		res.reply('功能开发中');
-	}
-})));
+}));  
 
 module.exports = router;
 
