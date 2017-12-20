@@ -5,7 +5,7 @@ var wechat = require('wechat');
 var config = require('../config.js');
 var weichatApi = require('../lib/wechatAPI.js');
 
-router.use('/wechat', wechat(config,function(req, res, next) {
+router.use('/', wechat(config,function(req, res, next) {
 	
     var message=req.weixin;
     if (message && message.MsgType == 'text') {
